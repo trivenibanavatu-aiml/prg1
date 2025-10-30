@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ant Colony Optimization</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a1a;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 3em;
+            margin: 20px 0;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .grid-container {
+            position: relative;
+            width: 800px;
+            height: 600px;
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 10px;
+            margin: 20px auto;
+        }
+
+        .node {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #4CAF50;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+
+        .path {
+            position: absolute;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            transform-origin: left center;
+            pointer-events: none;
+        }
+
+        .ant {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s linear;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #444;
+        }
+
+        .info {
+            color: #fff;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1><b>TRIVENI</b></h1>
+    <div class="grid-container" id="gridContainer"></div>
+    <div class="controls">
+        <button onclick="startACO()">Start ACO</button>
+        <button onclick="resetGrid()">Reset Grid</button>
+    </div>
+    <div class="info" id="info">
+        Click on the black area to add nodes. Then press Start ACO to begin.
+    </div>
+
+    <script>
+        const container = document.getElementById('gridContainer');
+        const info = document.getElementById('info');
+        let nodes = [];
+        let paths = [];
+        let pheromones = [];
+        let ants = [];
+        let isRunning = false;
+
+        // ACO parameters
+        const numAnts = 20;
+        const evaporationRate = 0.1;
+        const pheromoneDeposit = 1.0;
+        const alpha = 1; // pheromone importance
+        const beta = 2;  // distance importance
+
+        container.addEventListener('click', function(e) {
+            if (isRunning) return;
+            
+            const rect = container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            addNode(x, y);
+        });
+
+        function addNode(x, y) {
+            const node = document.createElement('div');
+            node.className = 'node';
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+            container.appendChild(node);
+            nodes.push({x, y, element: node});
+
+            if (nodes.length > 1) {
+                createPaths();
+            }
+        }
+
+        function createPaths() {
+            // Clear existing paths
+            paths.forEach(p => p.element.remove());
+            paths = [];
+            pheromones = [];
+
+            // Create paths between all nodes
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const path = document.createElement('div');
+                    path.className = 'path';
+                    
+                    const dx = nodes[j].x - nodes[i].x;
+                    const dy = nodes[j].y - nodes[i].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const angle = Math.atan2(dy, dx);
+
+                    path.style.width = distance + 'px';
+                    path.style.left = nodes[i].x + 'px';
+                    path.style.top = nodes[i].y + 'px';
+                    path.style.transform = `rotate(${angle}rad)`;
+
+                    container.appendChild(path);
+                    paths.push({
+                        from: i,
+                        to: j,
+                        distance: distance,
+                        element: path
+                    });
+                    pheromones.push(1.0); // Initial pheromone level
+                }
+            }
+        }
+
+        function updatePaths() {
+            paths.forEach((path, index) => {
+                const intensity = Math.min(pheromones[index], 5) / 5;
+                path.element.style.background = `rgba(255, 255, 255, ${intensity})`;
+            });
+        }
+
+        class Ant {
+            constructor() {
+                this.element = document.createElement('div');
+                this.element.className = 'ant';
+                container.appendChild(this.element);
+                this.reset();
+            }
+
+            reset() {
+                this.currentNode = Math.floor(Math.random() * nodes.length);
+                this.visited = [this.currentNode];
+                this.updatePosition();
+            }
+
+            updatePosition() {
+                const node = nodes[this.currentNode];
+                this.element.style.left = node.x + 'px';
+                this.element.style.top = node.y + 'px';
+            }
+
+            move() {
+                if (this.visited.length === nodes.length) {
+                    return false;
+                }
+
+                const nextNode = this.selectNextNode();
+                if (nextNode === -1) return false;
+
+                this.visited.push(nextNode);
+                this.currentNode = nextNode;
+                this.updatePosition();
+                return true;
+            }
+
+            selectNextNode() {
+                const unvisited = Array.from({length: nodes.length}, (_, i) => i)
+                    .filter(i => !this.visited.includes(i));
+
+                if (unvisited.length === 0) return -1;
+
+                const probabilities = [];
+                let totalProbability = 0;
+
+                for (const next of unvisited) {
+                    const pathIndex = this.getPathIndex(this.currentNode, next);
+                    const distance = paths[pathIndex].distance;
+                    const pheromone = pheromones[pathIndex];
+                    
+                    const probability = Math.pow(pheromone, alpha) * Math.pow(1/distance, beta);
+                    probabilities.push({node: next, probability});
+                    totalProbability += probability;
+                }
+
+                const random = Math.random() * totalProbability;
+                let sum = 0;
+                
+                for (const {node, probability} of probabilities) {
+                    sum += probability;
+                    if (random <= sum) return node;
+                }
+
+                return unvisited[0];
+            }
+
+            getPathIndex(from, to) {
+                if (from > to) [from, to] = [to, from];
+                return paths.findIndex(p => p.from === from && p.to === to);
+            }
+
+            depositPheromones() {
+                for (let i = 0; i < this.visited.length - 1; i++) {
+                    const from = this.visited[i];
+                    const to = this.visited[i + 1];
+                    const pathIndex = this.getPathIndex(from, to);
+                    pheromones[pathIndex] += pheromoneDeposit;
+                }
+            }
+        }
+
+        function startACO() {
+            if (nodes.length < 2) {
+                info.textContent = "Please add at least 2 nodes before starting";
+                return;
+            }
+
+            isRunning = true;
+            info.textContent = "ACO is running...";
+
+            // Create ants if they don't exist
+            if (ants.length === 0) {
+                for (let i = 0; i < numAnts; i++) {
+                    ants.push(new Ant());
+                }
+            }
+
+            // Reset ants
+            ants.forEach(ant => ant.reset());
+
+            function update() {
+                if (!isRunning) return;
+
+                // Evaporate pheromones
+                pheromones = pheromones.map(p => p * (1 - evaporationRate));
+
+                // Move ants
+                let allFinished = true;
+                ants.forEach(ant => {
+                    if (ant.move()) {
+                        allFinished = false;
+                    }
+                });
+
+                // If all ants finished their tour
+                if (allFinished) {
+                    ants.forEach(ant => {
+                        ant.depositPheromones();
+                        ant.reset();
+                    });
+                }
+
+                updatePaths();
+                requestAnimationFrame(update);
+            }
+
+            update();
+        }
+
+        function resetGrid() {
+            isRunning = false;
+            nodes.forEach(node => node.element.remove());
+            paths.forEach(path => path.element.remove());
+            ants.forEach(ant => ant.element.remove());
+            nodes = [];
+            paths = [];
+            pheromones = [];
+            ants = [];
+            info.textContent = "Click on the black area to add nodes. Then press Start ACO to begin.";
+        }
+
+        // Add three initial nodes in a triangle formation
+        addNode(400, 100);  // Top node
+        addNode(200, 400);  // Bottom left node
+        addNode(600, 400);  // Bottom right node
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Biodata Form</title>
+    <meta name="description" content="Biodata form template">
+    <link rel="stylesheet" href="biodata_form.css">
+  </head>
+  <body>
+    <header>
+      <h1>Biodata Form</h1>
+      <p>Fill in your details below and click Submit.</p>
+    </header>
+
+    <main>
+      <form id="biodata-form" action="#" method="post" enctype="multipart/form-data">
+        <fieldset>
+          <legend>Personal Information</legend>
+
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="fullName" name="fullName" required>
+
+          <label for="email">Email <span class="required">*</span></label>
+          <input type="email" id="email" name="email" required>
+
+          <label for="phone">Phone</label>
+          <input type="tel" id="phone" name="phone" placeholder="+1 555 555 5555">
+
+          <label for="dob">Date of Birth</label>
+          <input type="date" id="dob" name="dob">
+
+          <div class="radio-row">
+            <span class="label">Gender</span>
+            <label><input type="radio" name="gender" value="male"> Male</label>
+            <label><input type="radio" name="gender" value="female"> Female</label>
+            <label><input type="radio" name="gender" value="other"> Other</label>
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+          <legend>Address</legend>
+          <label for="address">Address</label>
+          <textarea id="address" name="address" rows="3" placeholder="Street, City, Country"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Education</legend>
+          <label for="education">Highest Qualification</label>
+          <select id="education" name="education">
+            <option value="">-- Select --</option>
+            <option>High School</option>
+            <option>Diploma</option>
+            <option>Bachelor's Degree</option>
+            <option>Master's Degree</option>
+            <option>PhD</option>
+          </select>
+
+          <label for="institution">Institution / University</label>
+          <input type="text" id="institution" name="institution">
+        </fieldset>
+
+        <fieldset>
+          <legend>Skills</legend>
+          <label class="checkbox"><input type="checkbox" name="skills" value="html"> HTML</label>
+          <label class="checkbox"><input type="checkbox" name="skills" value="css"> CSS</label>
+          <label class="checkbox"><input type="checkbox" name="skills" value="js"> JavaScript</label>
+          <label class="checkbox"><input type="checkbox" name="skills" value="python"> Python</label>
+          <label class="checkbox"><input type="checkbox" name="skills" value="communication"> Communication</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Experience</legend>
+          <label for="experience">Brief Experience / Achievements</label>
+          <textarea id="experience" name="experience" rows="4" placeholder="Describe roles, achievements..."></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Photo</legend>
+          <label for="photo">Upload Photo</label>
+          <input type="file" id="photo" name="photo" accept="image/*">
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Submit</button>
+          <button type="reset" class="btn">Reset</button>
+        </div>
+      </form>
+    </main>
+
+    <footer>
+      <small>© Your Name</small>
+    </footer>
+  </body>
+</html>

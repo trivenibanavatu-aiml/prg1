@@ -1,0 +1,16 @@
+import streamlit as st
+
+st.text("Home Page",)
+st.text("TEEGALA KRISHNA REDDY ENGINEERING COLLEGE",)
+st.image(image="./images/1.jpg",width=200)
+st.image(image="./images/2.jpg",width=500)
+st.text("Established in 2001, TKR Engineering College is committed to excellence in education and research.")
+st.text("Vision: Imparting Knowledge and instilling skills to the aspiring students in the field of Engineering, Technology, Science and Management to face the emerging challenges of the society..")
+st.text("M1:Encouraging scholarly activities that transfer knowledge in the areas of Engineering, Technology, Science and Management.")
+st.text("M2:Ensuring students of all levels, well trained to meet the needs of education and their future endeavors.")
+st.text("M3:Inculcating human values and ethics into the education system for the all-round development of the students.") 
+#st.text("Achievements: NBA Accreditation, NAAC 'A' Grade, Ranked among top engineering colleges in Telangana.")
+st.text("Features: State-of-the-art labs, Experienced faculty, Industry collaborations, Strong alumni network.")
+st.text("Programs Offered: Undergraduate and Postgraduate courses in Engineering and Technology.")  
+st.text("Commitment:Teegala Krishna Reddy Engineering College is committed to provide quality Technical education to the students through dedicated and talented faculty, good Infrastructure, Laboratories and research." )
+#st.snow()

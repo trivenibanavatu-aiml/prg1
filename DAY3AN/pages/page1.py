@@ -1,0 +1,15 @@
+import streamlit as st
+st.title("Student Registration form")
+st.text_input("Enter Student Name")
+st.number_input("Enter Student Age", min_value=1, max_value=100)
+st.selectbox("Select Course", ["Python", "Java", "C++"])
+st.date_input("enter date")
+st.time_input("Enter time")
+st.text_area("Enter Address")
+st.multiselect("Select Subjects", ["Math", "Science", "English"])
+st.slider("year of study",1,4) 
+st.text("TKREC")
+if st.button("Submit"):
+    st.success("Registration successfully!")
+    st.snow()
+st.write("Thank you for registering!")

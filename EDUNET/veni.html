@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Biodata</title>
+		<meta name="description" content="Personal biodata page">
+		<link rel="stylesheet" href="styles.css">
+		<style>
+			/* Resume theme colors */
+			:root {
+				--bg-warm: #fff6e9;
+				--card-warm: #ffffff;
+				--text-warm: #2d2d2d;
+				--accent-warm: #2b60c1;
+				--heading-color: #1a4c9c;
+			}
+			
+			body {
+				background: linear-gradient(135deg, var(--bg-warm), #fff9f2);
+				color: var(--text-warm);
+				min-height: 100vh;
+				line-height: 1.6;
+			}
+
+			header h1 {
+				color: var(--heading-color);
+				position: relative;
+				display: inline-block;
+				font-size: 2rem;
+				margin-bottom: 0.5rem;
+			}
+
+			header h1::after {
+				content: '';
+				position: absolute;
+				bottom: -4px;
+				left: 0;
+				width: 100%;
+				height: 3px;
+				background: var(--accent-warm);
+				transform: scaleX(0.8);
+				opacity: 0.9;
+			}
+
+			/* Print styles for PDF output */
+			@media print {
+				body {
+					background: none;
+					margin: 0;
+					padding: 0;
+				}
+
+				main {
+					box-shadow: none !important;
+					margin: 0 !important;
+					padding: 0 !important;
+					border: none !important;
+				}
+
+				.biodata {
+					gap: 1rem !important;
+				}
+
+				.print-btn {
+					display: none !important;
+				}
+
+				.photo {
+					border: 1px solid #ddd !important;
+					box-shadow: none !important;
+				}
+
+				header p, footer {
+					display: none !important;
+				}
+
+				.section {
+					page-break-inside: avoid;
+					margin-bottom: 0.8rem !important;
+				}
+
+				h4 {
+					color: var(--heading-color) !important;
+					border-bottom: 1px solid #eee;
+					padding-bottom: 0.2rem;
+				}
+
+				@page {
+					margin: 1.5cm;
+					size: A4;
+				}
+			}
+
+			header p {
+				color: #666;
+			}
+
+			main {
+				background-color: var(--card-warm);
+				box-shadow: 0 4px 20px rgba(255, 184, 112, 0.1);
+				border-radius: 12px;
+				padding: 2rem;
+				border: 1px solid rgba(255, 184, 112, 0.1);
+			}
+
+			footer small {
+				color: #888;
+			}
+
+			/* Small local styles for the biodata layout */
+			.biodata {
+				display: grid;
+				grid-template-columns: 220px 1fr;
+				gap: 1.5rem;
+				align-items: start;
+			}
+			.photo {
+				width: 220px;
+				height: 220px;
+				border-radius: 8px;
+				background: linear-gradient(135deg,#ffeedd,#fff5eb);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #666;
+				font-weight: 600;
+				font-size: 0.95rem;
+				overflow: hidden;
+				border: 3px solid #fff;
+				box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+				position: relative;
+			}
+			.photo img { 
+				width: 100%; 
+				height: 100%; 
+				object-fit: cover;
+				display: block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				transition: transform 0.3s ease;
+			}
+			.photo:hover img {
+				transform: scale(1.05);
+			}
+			.details h3 { margin: 0 0 0.25rem 0; }
+			.meta { color: #444; margin: 0.25rem 0 0.75rem 0; }
+			.section { margin-bottom: 1rem; }
+			.section h4 { margin: 0 0 0.5rem 0; font-size: 1rem; }
+			.grid-2 { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 0.5rem; }
+			.label { font-weight: 700; color: #222; }
+			.value { color: #333; }
+			.contact a { color: var(--netflix-red); text-decoration: none; }
+			.print-btn { margin-top: 0.5rem; background: var(--netflix-red); color: #fff; border: none; padding: 0.5rem 0.9rem; border-radius: 4px; cursor: pointer; }
+			@media (max-width: 720px) {
+				.biodata { grid-template-columns: 1fr; }
+				.photo { width: 100%; height: 260px; }
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>Biodata</h1>
+			<p>A concise personal biodata template you can edit.</p>
+		</header>
+
+		<main>
+			<article class="biodata">
+				<div>
+					<figure class="photo" aria-label="Profile photo">
+						<img src="Veni.jpeg" alt="Veni's profile photo">
+					</figure>
+					<div style="margin-top:0.75rem; text-align:center;">
+						<button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+					</div>
+				</div>
+
+				<div class="details">
+					<header>
+						<h3>Your Name Here</h3>
+						<div class="meta">
+							<span class="profession">Software Developer</span>
+							• <a href="mailto:you@example.com">you@example.com</a>
+							• <a href="tel:+1234567890">+1 234 567 890</a>
+							• Location
+						</div>
+					</header>
+
+					<section class="section">
+						<h4>Professional Summary</h4>
+						<p>
+							Dedicated and efficient software developer with X years of experience in web development, 
+							application development, and database design. Proven ability to leverage full-stack knowledge 
+							and experience to build interactive and user-centered website designs to scale.
+						</p>
+					</section>
+
+					<section class="section">
+						<h4>Core Competencies</h4>
+						<div class="grid-2">
+							<div>• Front-end Development</div>
+							<div>• Back-end Development</div>
+							<div>• Database Design</div>
+							<div>• API Integration</div>
+							<div>• Problem Solving</div>
+							<div>• Team Leadership</div>
+						</div>
+					</section>
+
+					<section class="section">
+						<h4>Contact</h4>
+						<div class="contact">
+							<div class="label">Email</div>
+							<div class="value"><a href="mailto:you@example.com">you@example.com</a></div>
+							<div class="label">Phone</div>
+							<div class="value">+1 234 567 890</div>
+							<div class="label">Address</div>
+							<div class="value">1234 Street Name, City, Country</div>
+						</div>
+					</section>
+
+					<section class="section">
+						<h4>Education</h4>
+						<ul>
+							<li><strong>Degree Name</strong> — University Name (Year)</li>
+							<li><strong>Higher Secondary</strong> — School Name (Year)</li>
+						</ul>
+					</section>
+
+					<section class="section">
+						<h4>Skills</h4>
+						<p>HTML, CSS, JavaScript, Python, Communication, Teamwork</p>
+					</section>
+
+					<section class="section">
+						<h4>Experience</h4>
+						<div>
+							<strong>Job Title</strong> — Company Name (Start — End)
+							<p>Brief description of responsibilities and achievements.</p>
+						</div>
+					</section>
+
+					<section class="section">
+						<h4>Hobbies / Interests</h4>
+						<p>Reading, Traveling, Coding, Music</p>
+					</section>
+				</div>
+			</article>
+		</main>
+
+		<footer>
+			<small>© Your Name</small>
+		</footer>
+	</body>
+</html>
